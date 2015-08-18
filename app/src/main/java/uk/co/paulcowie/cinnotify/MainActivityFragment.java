@@ -1,5 +1,6 @@
 package uk.co.paulcowie.cinnotify;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,8 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        new NotificationAccessDialogManager(view.getContext()).popupIfAccessNeeded();
 
         final Button notification_button = (Button) view.findViewById(R.id.notify_button);
         final Notifier notifier = new Notifier(view.getContext());

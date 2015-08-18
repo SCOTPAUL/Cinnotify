@@ -3,4 +3,9 @@
     <string name="notify_button_description">Click to send a test notification</string>
     <string name="action_settings">Settings</string>
     <string name="create_notification">Create Notification</string>
+    <string name="open_notification_access">Open Notification Access</string>
+
+    <string name="notification_access_dialog_title">Need notification access</string>
+    <string name="notification_access_dialog_content">This app needs access to your notifications. Click OK and then check the box.</string>
+    <string name="ok">OK</string>
 </resources>
