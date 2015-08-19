@@ -14,7 +14,6 @@ public class NotificationListener extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
         Bundle extras = sbn.getNotification().extras;
-
         String title = extras.getString(Notification.EXTRA_TITLE);
         String text = extras.getString(Notification.EXTRA_TEXT);
 
@@ -23,6 +22,6 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn){
-
+        // Do nothing
     }
 }

@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 
+import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
+
 /**
  * Created by paul on 19/08/15.
  */
@@ -11,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ThemeSwitcher.switchTheme(this, "pref_theme", "dark");
         super.onCreate(savedInstanceState);
 
         getFragmentManager().beginTransaction()

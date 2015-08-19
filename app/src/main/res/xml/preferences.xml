@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:key="pref_ip"
-        android:title="@string/pref_ip"
-        android:summary="@string/pref_ip_summary"
-        android:inputType="phone"
-        android:digits="0123456789."
-        android:defaultValue="0.0.0.0" />
+    <PreferenceCategory
+        android:title="@string/pref_networking_settings"
+        android:key="pref_networking_settings">
+        <EditTextPreference
+            android:key="pref_ip"
+            android:title="@string/pref_ip"
+            android:summary="@string/pref_ip_summary"
+            android:inputType="phone"
+            android:digits="0123456789."
+            android:defaultValue="0.0.0.0" />
+        <EditTextPreference
+            android:key="pref_socket"
+            android:title="@string/pref_socket"
+            android:summary="@string/pref_socket_summary"
+            android:inputType="phone"
+            android:digits="0123456789"
+            android:defaultValue="6525" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/pref_appearance_settings"
+        android:key="pref_appearance_settings">
+        <ListPreference
+            android:key="pref_theme"
+            android:title="@string/pref_theme"
+            android:summary="@string/pref_theme_summary"
+            android:entries="@array/themes"
+            android:entryValues="@array/theme_values"
+            android:defaultValue="dark"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -1,9 +1,11 @@
-package uk.co.paulcowie.cinnotify;
+package uk.co.paulcowie.cinnotify.util;
 
 import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
+
+import uk.co.paulcowie.cinnotify.R;
 
 /**
  * Wrapper around NotificationCompat.Builder which makes it easier to construct simple
