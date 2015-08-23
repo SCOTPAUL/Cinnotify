@@ -6,18 +6,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.Settings;
-import android.view.MotionEvent;
 
 /**
  * Allows for the creation of a dialog to direct the user to the Notification Access settings
  */
 public class NotificationAccessDialogManager {
     private Context context;
+    private AlertDialog dialog;
+
+    public NotificationAccessDialogManager() {
+
+    }
 
     public NotificationAccessDialogManager(Context context){
         this.context = context;
     }
 
+    /**
+     * Checks if the app is able to access notifications
+     * @return {@code true} if app has notification access, {@code false} otherwise.
+     */
     private boolean hasNotificationAccess() {
         ContentResolver contentResolver = context.getContentResolver();
         String enabledNotificationListeners = Settings.Secure.getString(contentResolver, "enabled_notification_listeners");
@@ -31,8 +39,17 @@ public class NotificationAccessDialogManager {
      * there. Otherwise, nothing happens.
      */
     public void popupIfAccessNeeded(){
-        if(hasNotificationAccess()) return;
+        if(!hasNotificationAccess()){
+            if(dialog != null && dialog.isShowing()){
+                return;
+            }
+            
+            dialog = buildDialog();
+            dialog.show();
+        }
+    }
 
+    private AlertDialog buildDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setMessage(R.string.notification_access_dialog_content)
@@ -45,8 +62,13 @@ public class NotificationAccessDialogManager {
             }
         });
 
-        builder.create().show();
+        builder.setCancelable(false);
 
+        return builder.create();
+    }
+
+    public void setContext(Context context){
+        this.context = context;
     }
 
 }

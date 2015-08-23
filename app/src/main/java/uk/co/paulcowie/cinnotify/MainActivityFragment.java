@@ -1,5 +1,6 @@
 package uk.co.paulcowie.cinnotify;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,15 +15,16 @@ import uk.co.paulcowie.cinnotify.util.Notifier;
  */
 public class MainActivityFragment extends Fragment {
 
+    private NotificationAccessDialogManager notificationAccessDialogManager;
+
     public MainActivityFragment() {
+        notificationAccessDialogManager = new NotificationAccessDialogManager();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-        new NotificationAccessDialogManager(view.getContext()).popupIfAccessNeeded();
 
         final Button notification_button = (Button) view.findViewById(R.id.notify_button);
         final Notifier notifier = new Notifier(view.getContext());
@@ -35,5 +37,16 @@ public class MainActivityFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        View view = getView();
+        if(view != null){
+            notificationAccessDialogManager.setContext(view.getContext());
+            notificationAccessDialogManager.popupIfAccessNeeded();
+        }
     }
 }

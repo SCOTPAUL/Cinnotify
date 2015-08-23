@@ -5,14 +5,16 @@ import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 import android.view.View;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import uk.co.paulcowie.cinnotify.R;
 
 /**
- * Wrapper around NotificationCompat.Builder which makes it easier to construct simple
+ * Wrapper around {@code NotificationCompat.Builder} which makes it easier to construct simple
  * notifications for testing
  */
 public class Notifier {
-    private static int notifierId = 0;
+    private static AtomicInteger notifierId = new AtomicInteger();
     private int id;
     private NotificationManager notificationManager;
     private Context context;
@@ -20,7 +22,7 @@ public class Notifier {
     public Notifier(Context context){
         this.context = context;
         notificationManager = (NotificationManager) this.context.getSystemService(Context.NOTIFICATION_SERVICE);
-        this.id = notifierId++;
+        this.id = notifierId.getAndIncrement();
     }
 
     /**

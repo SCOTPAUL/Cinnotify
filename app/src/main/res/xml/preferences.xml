@@ -11,14 +11,13 @@
             android:digits="0123456789."
             android:defaultValue="0.0.0.0" />
         <EditTextPreference
-            android:key="pref_socket"
+            android:key="pref_port"
             android:title="@string/pref_socket"
             android:summary="@string/pref_socket_summary"
             android:inputType="phone"
             android:digits="0123456789"
             android:defaultValue="6525" />
     </PreferenceCategory>
-
     <PreferenceCategory
         android:title="@string/pref_appearance_settings"
         android:key="pref_appearance_settings">
