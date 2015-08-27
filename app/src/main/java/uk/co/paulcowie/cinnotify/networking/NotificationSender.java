@@ -40,7 +40,8 @@ public class NotificationSender implements Runnable {
         String server_ip = prefs.getString("pref_ip", "");
         int port = Integer.valueOf(prefs.getString("pref_port", "0"));
 
-        if(!serverIsUp(server_ip, port)){
+        Socket socket = getConnection(server_ip, port);
+        if(socket == null){
             Log.i(TAG, "Not sending since server is not up");
             return;
         }
@@ -48,24 +49,29 @@ public class NotificationSender implements Runnable {
         NotificationSerializer serializer = new NotificationSerializer(notification);
         byte[] transmission = serializer.getSerializedTransmission();
 
-        try {
-            InetAddress serverAddr = InetAddress.getByName(server_ip);
-
-            try(Socket socket = new Socket(serverAddr, port);
-                OutputStream out = socket.getOutputStream()) {
-                out.write(transmission);
-                out.flush();
-            }
-            catch(IOException e){
-                Log.w(TAG, e.getMessage());
-            }
+        try(OutputStream out = socket.getOutputStream()) {
+            out.write(transmission);
+            out.flush();
         }
-        catch(UnknownHostException e){
+        catch(IOException e){
             Log.w(TAG, e.getMessage());
+        }
+        finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private boolean serverIsUp(String ip, int port){
+    /**
+     * Returns a connected socket if the server is reachable.
+     * @param ip IP address of the server to connect to
+     * @param port Port to connect to
+     * @return A connected socket if server is reachable, null otherwise
+     */
+    private Socket getConnection(String ip, int port){
         try {
             SocketAddress sockaddr = new InetSocketAddress(ip, port);
             // Create an unbound socket
@@ -73,12 +79,13 @@ public class NotificationSender implements Runnable {
 
             // This method will block no more than timeoutMs.
             // If the timeout occurs, SocketTimeoutException is thrown.
-            int timeoutMs = 2000;   // 2 seconds
+            int timeoutMs = 2000;
             sock.connect(sockaddr, timeoutMs);
 
-            return true;
-        }catch(Exception ignored){
-            return false;
+            return sock;
+        }catch(Exception e){
+            Log.w(TAG, "Failed to connect");
+            return null;
         }
 
     }

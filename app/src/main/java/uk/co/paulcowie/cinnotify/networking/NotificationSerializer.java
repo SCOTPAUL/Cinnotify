@@ -33,11 +33,8 @@ public class NotificationSerializer {
      */
     public byte[] getSerializedTransmission(){
         byte[] transmissionBody = getTransmissionFromNotification().getBytes(StandardCharsets.UTF_8);
-
         int transmissionSize = transmissionBody.length;
-
         byte[] size = ByteBuffer.allocate(4).putInt(transmissionSize).array();
-
         byte[] transmission;
 
         try(ByteArrayOutputStream os = new ByteArrayOutputStream()) {
