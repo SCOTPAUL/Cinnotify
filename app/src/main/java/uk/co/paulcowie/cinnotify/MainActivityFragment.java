@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.ToggleButton;
 
 import uk.co.paulcowie.cinnotify.util.Notifier;
 
@@ -35,6 +38,7 @@ public class MainActivityFragment extends Fragment {
                 notifier.sendNotification("Foo", "Bar");
             }
         });
+
 
         return view;
     }
