@@ -8,6 +8,10 @@
         android:title="@string/pref_enabled"
         android:summary="@string/pref_enabled_summary"
         android:defaultValue="true" />
+    <PreferenceScreen
+        android:key="allowed_apps_activity"
+        android:title="@string/allowed_apps_title"
+        android:summary="@string/allowed_apps_summary" />
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_networking_settings"

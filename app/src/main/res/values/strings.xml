@@ -20,4 +20,6 @@
     <string name="pref_app_settings">App</string>
     <string name="pref_enabled">Listener Enabled</string>
     <string name="pref_enabled_summary">If off, the app will not try to send notifications to the server</string>
+    <string name="allowed_apps_title">Allowed Apps</string>
+    <string name="allowed_apps_summary">Select the apps that are allowed to send notifications</string>
 </resources>

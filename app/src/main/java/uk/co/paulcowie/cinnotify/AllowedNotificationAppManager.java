@@ -48,6 +48,8 @@ public class AllowedNotificationAppManager {
         catch(ClassNotFoundException e){
             allowedAppInfo = new ConcurrentHashMap<>();
         }
+
+        if(allowedAppInfo == null) allowedAppInfo = new ConcurrentHashMap<>();
         populateMap();
     }
 
@@ -111,6 +113,10 @@ public class AllowedNotificationAppManager {
     protected void finalize() throws Throwable{
         saveMap();
         super.finalize();
+    }
+
+    public Map<String, Boolean> getAllowedAppInfo(){
+        return allowedAppInfo;
     }
 
 

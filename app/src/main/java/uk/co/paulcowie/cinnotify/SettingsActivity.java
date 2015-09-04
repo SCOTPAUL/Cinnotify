@@ -1,6 +1,7 @@
 package uk.co.paulcowie.cinnotify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
+import uk.co.paulcowie.cinnotify.adapters.CheckBoxListAdapter;
 import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 /**
@@ -50,13 +52,27 @@ public class SettingsActivity extends AppCompatActivity {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
                             boolean valid = Pattern.matches("^(?:[0-9]{1,5})$", (String) newValue);
-                            if(!valid){
+                            if (!valid) {
                                 displayErrorToast(newValue + " is not a valid port.");
                             }
                             return valid;
                         }
                     }
             );
+
+
+            Preference allowedAppsPref = findPreference("allowed_apps_activity");
+
+            final Intent intent = new Intent(getActivity(), CheckBoxListAdapter.class);
+            if(allowedAppsPref != null){
+                allowedAppsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        startActivity(intent);
+                        return false;
+                    }
+                });
+            }
         }
 
         private void displayErrorToast(String errorMsg){
