@@ -28,8 +28,8 @@ public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter
         data.addAll(map.entrySet());
     }
 
-    public void sort(Comparator<Map.Entry<K, V>> comparitor){
-        Collections.sort(data, comparitor);
+    public void sort(Comparator<Map.Entry<K, V>> comparator){
+        Collections.sort(data, comparator);
         notifyDataSetChanged();
     }
 
