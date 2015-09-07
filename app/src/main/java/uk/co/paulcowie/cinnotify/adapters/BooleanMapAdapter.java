@@ -1,12 +1,19 @@
 package uk.co.paulcowie.cinnotify.adapters;
 
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.Comparator;
 import java.util.Map;
+
+import uk.co.paulcowie.cinnotify.AllowedNotificationAppManager;
 
 /**
  * Created by paul on 04/09/15.
@@ -16,9 +23,21 @@ public class BooleanMapAdapter extends MapAdapter<String, Boolean> {
 
     private int textViewResourceId;
     private int checkboxViewResourceId;
+    private AllowedNotificationAppManager allowedApps;
 
-    public BooleanMapAdapter(Map<String, Boolean> map, int resource, int textViewResourceId, int checkboxViewResourceId) {
+    public BooleanMapAdapter(Map<String, Boolean> map, int resource, int textViewResourceId, int checkboxViewResourceId, Context context) {
         super(map, resource);
+
+        this.allowedApps = new AllowedNotificationAppManager(context);
+
+        super.sort(new Comparator<Map.Entry<String, Boolean>>() {
+            @Override
+            public int compare(Map.Entry<String, Boolean> lhs, Map.Entry<String, Boolean> rhs) {
+                return allowedApps.getUserReadableFromPackageName(lhs.getKey())
+                        .compareTo(allowedApps.getUserReadableFromPackageName(rhs.getKey()));
+            }
+        });
+
         this.textViewResourceId = textViewResourceId;
         this.checkboxViewResourceId = checkboxViewResourceId;
     }
@@ -29,38 +48,11 @@ public class BooleanMapAdapter extends MapAdapter<String, Boolean> {
         final TextView text;
         final CheckBox checkBox;
 
-        // https://github.com/android/platform_frameworks_base/blob/master/core/java/android/widget/ArrayAdapter.java
-        try {
-            if (textViewResourceId == 0) {
-                //  If no custom field is assigned, assume the whole resource is a TextView
-                text = (TextView) view;
-            } else {
-                //  Otherwise, find the TextView field within the layout
-                text = (TextView) view.findViewById(textViewResourceId);
-            }
-        } catch (ClassCastException e) {
-            Log.e(TAG, "You must supply a resource ID for a TextView");
-            throw new IllegalStateException(
-                    "BooleanMapAdapter requires the resource ID to be a TextView", e);
-        }
-
-        try {
-            if (textViewResourceId == 0) {
-                //  If no custom field is assigned, assume the whole resource is a TextView
-                checkBox = (CheckBox) view;
-            } else {
-                //  Otherwise, find the TextView field within the layout
-                checkBox = (CheckBox) view.findViewById(checkboxViewResourceId);
-            }
-        } catch (ClassCastException e) {
-            Log.e(TAG, "You must supply a resource ID for a CheckBox");
-            throw new IllegalStateException(
-                    "BooleanMapAdapter requires the resource ID to be a CheckBox", e);
-        }
-
+        text = (TextView) view.findViewById(textViewResourceId);
+        checkBox = (CheckBox) view.findViewById(checkboxViewResourceId);
 
         Map.Entry<String, Boolean> item = getItem(position);
-        text.setText(item.getKey());
+        text.setText(allowedApps.getUserReadableFromPackageName(item.getKey()));
         checkBox.setChecked(item.getValue());
 
         return view;

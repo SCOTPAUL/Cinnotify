@@ -6,7 +6,8 @@
     android:paddingEnd="16sp"
     android:paddingTop="15sp"
     android:paddingBottom="15sp"
-    >
+    android:descendantFocusability="blocksDescendants"
+>
 
     <TextView
         android:id="@+id/textView1"

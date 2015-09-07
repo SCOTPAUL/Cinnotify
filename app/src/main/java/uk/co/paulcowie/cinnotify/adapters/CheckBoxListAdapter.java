@@ -2,7 +2,10 @@ package uk.co.paulcowie.cinnotify.adapters;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ListAdapter;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -15,7 +18,8 @@ import uk.co.paulcowie.cinnotify.R;
  */
 public class CheckBoxListAdapter extends AppCompatActivity {
     private AllowedNotificationAppManager allowedApps;
-    private ListView listView;
+
+    private static final String TAG = CheckBoxListAdapter.class.getName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -23,15 +27,31 @@ public class CheckBoxListAdapter extends AppCompatActivity {
 
         setContentView(R.layout.activity_list_adapter);
 
-        try {
-            allowedApps = new AllowedNotificationAppManager(this);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        allowedApps = new AllowedNotificationAppManager(this);
 
-        ListAdapter adapter = new BooleanMapAdapter(allowedApps.getAllowedAppInfo(), R.layout.app_name_list, R.id.textView1, R.id.checkbox1);
+        final MapAdapter<String, Boolean> adapter = new BooleanMapAdapter(allowedApps.getAllowedAppInfo(), R.layout.app_name_list, R.id.textView1, R.id.checkbox1, this);
         ListView lv = (ListView) findViewById(R.id.list);
         lv.setAdapter(adapter);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox1);
+                adapter.setItem(position, !checkBox.isChecked());
+                checkBox.toggle();
+                Log.v(TAG, "Set item at position " + position + " to " + checkBox.isChecked());
+            }
+        });
+    }
+
+    @Override
+    protected void onStop(){
+        try{
+            allowedApps.save();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        super.onStop();
     }
 }

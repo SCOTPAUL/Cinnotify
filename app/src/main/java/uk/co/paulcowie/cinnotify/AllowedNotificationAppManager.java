@@ -24,7 +24,7 @@ public class AllowedNotificationAppManager {
     private final Context context;
     private final PackageManager pm;
 
-    public AllowedNotificationAppManager(Context context) throws IOException {
+    public AllowedNotificationAppManager(Context context) {
         this.context = context;
         pm = context.getPackageManager();
         loadMap();
@@ -38,14 +38,15 @@ public class AllowedNotificationAppManager {
     }
 
     @SuppressWarnings("unchecked")
-    private void loadMap() throws IOException {
-        FileInputStream fis = context.openFileInput(MAP_FILE_NAME);
-        ObjectInputStream ois = new ObjectInputStream(fis);
+    private void loadMap() {
 
         try {
+            FileInputStream fis = context.openFileInput(MAP_FILE_NAME);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+
             allowedAppInfo = (Map<String, Boolean>) ois.readObject();
         }
-        catch(ClassNotFoundException e){
+        catch(ClassNotFoundException | IOException e){
             allowedAppInfo = new ConcurrentHashMap<>();
         }
 
@@ -57,42 +58,29 @@ public class AllowedNotificationAppManager {
         List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
 
         // Remove old apps from map
-        for(String appName : allowedAppInfo.keySet()){
+        for(String app : allowedAppInfo.keySet()){
             boolean found = false;
 
-            for(ApplicationInfo app : appInfo){
-                if(app.loadLabel(pm).equals(appName)){
+            for(ApplicationInfo appInList : appInfo){
+                if(app.equals(appInList.packageName)){
                     found = true;
                 }
             }
 
             if(!found){
-                allowedAppInfo.remove(appName);
+                allowedAppInfo.remove(app);
             }
         }
 
         // Add new apps to map
         for(ApplicationInfo app : appInfo){
-            if(!allowedAppInfo.containsKey((String) app.loadLabel(pm))){
-                allowedAppInfo.put((String) app.loadLabel(pm), false);
+            if(!allowedAppInfo.containsKey(app.packageName)){
+                allowedAppInfo.put(app.packageName, false);
             }
         }
     }
 
-    public Map<String, Boolean> getUserReadableAppMap(){
-        Map<String, Boolean> userReadableMap = new HashMap<>(allowedAppInfo.size());
-
-        String appName;
-        for(String packageName : allowedAppInfo.keySet()){
-            if((appName = getUserReadableFromPackageName(packageName)) != null){
-                userReadableMap.put(appName, allowedAppInfo.get(packageName));
-            }
-        }
-
-        return userReadableMap;
-    }
-
-    private String getUserReadableFromPackageName(String packageName){
+    public String getUserReadableFromPackageName(String packageName){
         // https://stackoverflow.com/questions/5841161/get-application-name-from-package-name
 
         ApplicationInfo ai;
@@ -109,14 +97,12 @@ public class AllowedNotificationAppManager {
         return (ret != null) && ret;
     }
 
-    @Override
-    protected void finalize() throws Throwable{
-        saveMap();
-        super.finalize();
-    }
-
     public Map<String, Boolean> getAllowedAppInfo(){
         return allowedAppInfo;
+    }
+
+    public void save() throws IOException {
+        saveMap();
     }
 
 

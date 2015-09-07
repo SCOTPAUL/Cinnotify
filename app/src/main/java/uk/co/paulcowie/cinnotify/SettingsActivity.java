@@ -62,7 +62,6 @@ public class SettingsActivity extends AppCompatActivity {
 
 
             Preference allowedAppsPref = findPreference("allowed_apps_activity");
-
             final Intent intent = new Intent(getActivity(), CheckBoxListAdapter.class);
             if(allowedAppsPref != null){
                 allowedAppsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

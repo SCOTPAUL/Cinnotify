@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -11,21 +12,23 @@ import uk.co.paulcowie.cinnotify.networking.NotificationSender;
 
 
 public class NotificationListener extends NotificationListenerService {
+    private static final String TAG = NotificationListener.class.getName();
 
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
         boolean sendable;
+        String appName;
 
-        try {
-            AllowedNotificationAppManager allowedApps = new AllowedNotificationAppManager(getApplicationContext());
-            sendable = allowedApps.canSendNotification(sbn.getPackageName());
-        } catch (IOException e) {
-            sendable = false;
-        }
+        AllowedNotificationAppManager allowedApps = new AllowedNotificationAppManager(getApplicationContext());
+        appName = allowedApps.getUserReadableFromPackageName(sbn.getPackageName());
+        sendable = allowedApps.canSendNotification(appName);
 
         if(sendable && isEnabled()){
             new Thread(new NotificationSender(getApplicationContext(), sbn.getNotification())).start();
+        }
+        else{
+            Log.v(TAG, "App " + appName + " sent a notification which wasn't sent on");
         }
     }
 

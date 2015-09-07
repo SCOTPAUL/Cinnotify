@@ -15,23 +15,22 @@ import java.util.Map;
  */
 public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter {
     private final ArrayList<Map.Entry<K, V>> data;
+    private final Map<K, V> map;
     private int resource;
 
     private static final String TAG = MapAdapter.class.getName();
 
-
     public MapAdapter(Map<K, V> map, int resource){
         this.resource = resource;
+        this.map = map;
 
         data = new ArrayList<>();
         data.addAll(map.entrySet());
+    }
 
-        Collections.sort(data, new Comparator<Map.Entry<K, V>>() {
-            @Override
-            public int compare(Map.Entry<K, V> lhs, Map.Entry<K, V> rhs) {
-                return lhs.getKey().compareTo(rhs.getKey());
-            }
-        });
+    public void sort(Comparator<Map.Entry<K, V>> comparitor){
+        Collections.sort(data, comparitor);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -42,6 +41,14 @@ public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter
     @Override
     public Map.Entry<K, V> getItem(int position) {
         return data.get(position);
+    }
+
+    public void setItem(int position, V newValue){
+        Map.Entry<K, V> entry = data.get(position);
+
+        K key = entry.getKey();
+        entry.setValue(newValue);
+        map.put(key, newValue);
     }
 
     @Override
