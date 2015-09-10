@@ -54,7 +54,7 @@ public class AllowedAppsActivity extends AppCompatActivity {
             protected Void doInBackground(final Void... params) {
                 allowedApps = new AllowedNotificationManager(context);
 
-                adapter = new CheckBoxAdapter(allowedApps.getAllowedAppInfo(), R.layout.app_name_list, R.id.textView1, R.id.checkbox1, context);
+                adapter = new CheckBoxAdapter(allowedApps.getAllowedAppInfo(), R.layout.app_name_list, R.id.appIcon, R.id.textView1, R.id.checkbox1, context);
                 return null;
             }
 

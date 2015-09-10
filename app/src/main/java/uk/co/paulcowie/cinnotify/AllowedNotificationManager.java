@@ -3,6 +3,7 @@ package uk.co.paulcowie.cinnotify;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -85,7 +86,7 @@ public class AllowedNotificationManager {
         }
     }
 
-    public String getUserReadableFromPackageName(String packageName){
+    public String getUserReadableName(String packageName){
         // https://stackoverflow.com/questions/5841161/get-application-name-from-package-name
 
         ApplicationInfo ai;
@@ -96,6 +97,14 @@ public class AllowedNotificationManager {
             ai = null;
         }
         return (String) (ai != null ? pm.getApplicationLabel(ai) : null);
+    }
+
+    public Drawable getAppIcon(String packageName){
+        try {
+            return pm.getApplicationIcon(packageName);
+        } catch (PackageManager.NameNotFoundException e) {
+            return null;
+        }
     }
 
     public boolean canSendNotification(String packageName){

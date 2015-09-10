@@ -19,7 +19,7 @@ public class NotificationListener extends NotificationListenerService {
         String appName;
 
         AllowedNotificationManager allowedApps = new AllowedNotificationManager(getApplicationContext());
-        appName = allowedApps.getUserReadableFromPackageName(sbn.getPackageName());
+        appName = allowedApps.getUserReadableName(sbn.getPackageName());
         sendable = allowedApps.canSendNotification(sbn.getPackageName());
 
         if(sendable && isEnabled()){
