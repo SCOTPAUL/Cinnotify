@@ -15,7 +15,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by paul on 03/09/15.
+ * Manages access to a {@code Map} of apps to booleans indicating whether or not they are able to
+ * send notifications to a Cinnotify server. This list is loaded from a file on use, and then
+ * updated and can be saved when finished with.
+ *
+ * IMPORTANT: Make sure {@link #save()} is called when this object is finished with
  */
 public class AllowedNotificationAppManager {
     private static String MAP_FILE_NAME = "allowed_notification_apps.ser";
@@ -39,7 +43,6 @@ public class AllowedNotificationAppManager {
 
     @SuppressWarnings("unchecked")
     private void loadMap() {
-
         try {
             FileInputStream fis = context.openFileInput(MAP_FILE_NAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -101,6 +104,10 @@ public class AllowedNotificationAppManager {
         return allowedAppInfo;
     }
 
+    /**
+     * Saves the Map to backing storage.
+     * @throws IOException If saving failed
+     */
     public void save() throws IOException {
         saveMap();
     }

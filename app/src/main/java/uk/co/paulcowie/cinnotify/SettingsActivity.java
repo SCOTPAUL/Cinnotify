@@ -10,13 +10,13 @@ import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
-import uk.co.paulcowie.cinnotify.adapters.CheckBoxListAdapter;
+import uk.co.paulcowie.cinnotify.adapters.AllowedAppsActivity;
 import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 /**
- * Created by paul on 19/08/15.
+ * An {@link AppCompatActivity} which shows and manages user preferences, and handles error messages
+ * if invalid values are set.
  */
-
 public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +60,8 @@ public class SettingsActivity extends AppCompatActivity {
                     }
             );
 
-
             Preference allowedAppsPref = findPreference("allowed_apps_activity");
-            final Intent intent = new Intent(getActivity(), CheckBoxListAdapter.class);
+            final Intent intent = new Intent(getActivity(), AllowedAppsActivity.class);
             if(allowedAppsPref != null){
                 allowedAppsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override

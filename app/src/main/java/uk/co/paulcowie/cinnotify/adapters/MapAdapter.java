@@ -11,7 +11,9 @@ import java.util.Comparator;
 import java.util.Map;
 
 /**
- * Created by paul on 04/09/15.
+ * A ListView adapter that can be used with {@code Map} objects. Any class extending this one must
+ * override {@link #getView(int, View, ViewGroup)} to actually display a {@link View}.
+ * @see Map
  */
 public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter {
     private final ArrayList<Map.Entry<K, V>> data;
@@ -20,6 +22,10 @@ public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter
 
     private static final String TAG = MapAdapter.class.getName();
 
+    /**
+     * @param map A map
+     * @param resource A layout that this adapter can be used on
+     */
     public MapAdapter(Map<K, V> map, int resource){
         this.resource = resource;
         this.map = map;
@@ -28,6 +34,10 @@ public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter
         data.addAll(map.entrySet());
     }
 
+    /**
+     * Sets a sort for the {@code ListView} that this adapter is used on.
+     * @param comparator Comparator to be used for sort
+     */
     public void sort(Comparator<Map.Entry<K, V>> comparator){
         Collections.sort(data, comparator);
         notifyDataSetChanged();
@@ -56,6 +66,12 @@ public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter
         return position;
     }
 
+    /**
+     * Provides a basic view, which must be overridden with a {@code getView()} method which
+     * actually displays the contents of the map.
+     *
+     * {@inheritDoc}
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final View view;

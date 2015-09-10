@@ -22,7 +22,7 @@
             android:label="@string/action_settings"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".adapters.CheckBoxListAdapter"
+            android:name=".adapters.AllowedAppsActivity"
             android:label="@string/allowed_apps_title"
             android:parentActivityName=".SettingsActivity"/>
         <service android:name=".NotificationListener"
