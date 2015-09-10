@@ -24,14 +24,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AllowedNotificationAppManager {
     private static String MAP_FILE_NAME = "allowed_notification_apps.ser";
 
-    private Map<String, Boolean> allowedAppInfo;
+    private static boolean mapLoaded = false;
+    private static Map<String, Boolean> allowedAppInfo;
     private final Context context;
     private final PackageManager pm;
 
     public AllowedNotificationAppManager(Context context) {
         this.context = context;
         pm = context.getPackageManager();
-        loadMap();
+        if(!mapLoaded) loadMap();
     }
 
     private void saveMap() throws IOException {
@@ -55,6 +56,7 @@ public class AllowedNotificationAppManager {
 
         if(allowedAppInfo == null) allowedAppInfo = new ConcurrentHashMap<>();
         populateMap();
+        mapLoaded = true;
     }
 
     private void populateMap(){

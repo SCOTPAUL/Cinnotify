@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.ToggleButton;
 
 import uk.co.paulcowie.cinnotify.util.Notifier;
 
@@ -18,24 +15,27 @@ import uk.co.paulcowie.cinnotify.util.Notifier;
  */
 public class MainActivityFragment extends Fragment {
 
+    private AllowedNotificationAppManager allowedApps;
+    private Context appContext;
+    private Button notificationButton;
     private NotificationAccessDialogManager notificationAccessDialogManager;
-
-    public MainActivityFragment() {
-        notificationAccessDialogManager = new NotificationAccessDialogManager();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        notificationAccessDialogManager = new NotificationAccessDialogManager(getActivity());
+        appContext = getActivity().getApplicationContext();
+        allowedApps = new AllowedNotificationAppManager(appContext);
+
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        final Button notification_button = (Button) view.findViewById(R.id.notify_button);
+        notificationButton = (Button) view.findViewById(R.id.notify_button);
         final Notifier notifier = new Notifier(view.getContext());
 
-        notification_button.setOnClickListener(new View.OnClickListener() {
+        notificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notifier.sendNotification("Foo", "Bar");
+                notifier.sendNotification("Hello", "World");
             }
         });
 
@@ -51,6 +51,8 @@ public class MainActivityFragment extends Fragment {
         if(view != null){
             notificationAccessDialogManager.setContext(view.getContext());
             notificationAccessDialogManager.popupIfAccessNeeded();
+
+            notificationButton.setEnabled(allowedApps.canSendNotification(appContext.getPackageName()));
         }
     }
 }
