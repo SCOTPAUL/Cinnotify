@@ -20,4 +20,14 @@
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView android:text="@string/cinnotify_no_send_explanation" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#d7002f"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_below="@+id/notify_button"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:id="@+id/textView1" />
+
 </RelativeLayout>

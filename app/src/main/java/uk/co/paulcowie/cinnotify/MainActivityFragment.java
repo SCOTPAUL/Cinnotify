@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import uk.co.paulcowie.cinnotify.util.Notifier;
 
@@ -15,7 +16,7 @@ import uk.co.paulcowie.cinnotify.util.Notifier;
  */
 public class MainActivityFragment extends Fragment {
 
-    private AllowedNotificationAppManager allowedApps;
+    private AllowedNotificationManager allowedApps;
     private Context appContext;
     private Button notificationButton;
     private NotificationAccessDialogManager notificationAccessDialogManager;
@@ -25,7 +26,7 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         notificationAccessDialogManager = new NotificationAccessDialogManager(getActivity());
         appContext = getActivity().getApplicationContext();
-        allowedApps = new AllowedNotificationAppManager(appContext);
+        allowedApps = new AllowedNotificationManager(appContext);
 
         final View view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -47,12 +48,22 @@ public class MainActivityFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
+
         View view = getView();
         if(view != null){
             notificationAccessDialogManager.setContext(view.getContext());
             notificationAccessDialogManager.popupIfAccessNeeded();
 
-            notificationButton.setEnabled(allowedApps.canSendNotification(appContext.getPackageName()));
+            boolean testNotificationEnabled = allowedApps.canSendNotification(appContext.getPackageName());
+            notificationButton.setEnabled(testNotificationEnabled);
+            TextView warning = (TextView) view.findViewById(R.id.textView1);
+
+            if(testNotificationEnabled){
+                warning.setVisibility(View.GONE);
+            }
+            else{
+                warning.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

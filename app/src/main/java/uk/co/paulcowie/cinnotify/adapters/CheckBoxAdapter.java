@@ -9,7 +9,7 @@ import android.widget.TextView;
 import java.util.Comparator;
 import java.util.Map;
 
-import uk.co.paulcowie.cinnotify.AllowedNotificationAppManager;
+import uk.co.paulcowie.cinnotify.AllowedNotificationManager;
 
 /**
  * A ListView adapter used to create ListViews of application names and checkboxes.
@@ -19,12 +19,12 @@ public class CheckBoxAdapter extends MapAdapter<String, Boolean> {
 
     private int textViewResourceId;
     private int checkboxViewResourceId;
-    private AllowedNotificationAppManager allowedApps;
+    private AllowedNotificationManager allowedApps;
 
     public CheckBoxAdapter(Map<String, Boolean> map, int resource, int textViewResourceId, int checkboxViewResourceId, Context context) {
         super(map, resource);
 
-        this.allowedApps = new AllowedNotificationAppManager(context);
+        this.allowedApps = new AllowedNotificationManager(context);
 
         super.sort(new Comparator<Map.Entry<String, Boolean>>() {
             @Override

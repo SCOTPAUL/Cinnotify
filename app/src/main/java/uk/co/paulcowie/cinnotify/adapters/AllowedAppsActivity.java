@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 
 import java.io.IOException;
 
-import uk.co.paulcowie.cinnotify.AllowedNotificationAppManager;
+import uk.co.paulcowie.cinnotify.AllowedNotificationManager;
 import uk.co.paulcowie.cinnotify.R;
 import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
@@ -24,7 +24,7 @@ import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
  * which apps can send notifications to the server. This ListView is loaded asynchronously.
  */
 public class AllowedAppsActivity extends AppCompatActivity {
-    private AllowedNotificationAppManager allowedApps;
+    private AllowedNotificationManager allowedApps;
 
     private static final String TAG = AllowedAppsActivity.class.getName();
 
@@ -52,7 +52,7 @@ public class AllowedAppsActivity extends AppCompatActivity {
 
             @Override
             protected Void doInBackground(final Void... params) {
-                allowedApps = new AllowedNotificationAppManager(context);
+                allowedApps = new AllowedNotificationManager(context);
 
                 adapter = new CheckBoxAdapter(allowedApps.getAllowedAppInfo(), R.layout.app_name_list, R.id.textView1, R.id.checkbox1, context);
                 return null;

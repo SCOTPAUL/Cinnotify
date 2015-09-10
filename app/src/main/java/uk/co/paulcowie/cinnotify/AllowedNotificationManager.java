@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * IMPORTANT: Make sure {@link #save()} is called when this object is finished with
  */
-public class AllowedNotificationAppManager {
+public class AllowedNotificationManager {
     private static String MAP_FILE_NAME = "allowed_notification_apps.ser";
 
     private static boolean mapLoaded = false;
@@ -29,7 +29,7 @@ public class AllowedNotificationAppManager {
     private final Context context;
     private final PackageManager pm;
 
-    public AllowedNotificationAppManager(Context context) {
+    public AllowedNotificationManager(Context context) {
         this.context = context;
         pm = context.getPackageManager();
         if(!mapLoaded) loadMap();
@@ -91,7 +91,8 @@ public class AllowedNotificationAppManager {
         ApplicationInfo ai;
         try {
             ai = pm.getApplicationInfo(packageName, 0);
-        } catch (final PackageManager.NameNotFoundException e) {
+        }
+        catch (final PackageManager.NameNotFoundException e) {
             ai = null;
         }
         return (String) (ai != null ? pm.getApplicationLabel(ai) : null);

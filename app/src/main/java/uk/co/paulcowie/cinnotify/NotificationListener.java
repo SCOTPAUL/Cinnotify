@@ -6,8 +6,6 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import java.io.IOException;
-
 import uk.co.paulcowie.cinnotify.networking.NotificationSender;
 
 
@@ -20,7 +18,7 @@ public class NotificationListener extends NotificationListenerService {
         boolean sendable;
         String appName;
 
-        AllowedNotificationAppManager allowedApps = new AllowedNotificationAppManager(getApplicationContext());
+        AllowedNotificationManager allowedApps = new AllowedNotificationManager(getApplicationContext());
         appName = allowedApps.getUserReadableFromPackageName(sbn.getPackageName());
         sendable = allowedApps.canSendNotification(sbn.getPackageName());
 
