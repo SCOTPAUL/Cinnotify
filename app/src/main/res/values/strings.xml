@@ -10,9 +10,7 @@
     <string name="ok">OK</string>
 
     <string name="pref_ip">Server IP</string>
-    <string name="pref_ip_summary">The IP address of the Cinnotify server</string>
     <string name="pref_socket">Server Port</string>
-    <string name="pref_socket_summary">The port number of the Cinnotify server</string>
     <string name="pref_networking_settings">Networking</string>
     <string name="pref_appearance_settings">Appearance</string>
     <string name="pref_theme">Theme</string>

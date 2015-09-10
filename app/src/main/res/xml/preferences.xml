@@ -3,7 +3,7 @@
     <PreferenceCategory
         android:title="@string/pref_app_settings"
         android:key="pref_app_settings">
-    <CheckBoxPreference
+    <SwitchPreference
         android:key="pref_enabled"
         android:title="@string/pref_enabled"
         android:summary="@string/pref_enabled_summary"
@@ -15,14 +15,12 @@
         <EditTextPreference
             android:key="pref_ip"
             android:title="@string/pref_ip"
-            android:summary="@string/pref_ip_summary"
             android:inputType="phone"
             android:digits="0123456789."
             android:defaultValue="0.0.0.0" />
         <EditTextPreference
             android:key="pref_port"
             android:title="@string/pref_socket"
-            android:summary="@string/pref_socket_summary"
             android:inputType="phone"
             android:digits="0123456789"
             android:defaultValue="6525" />
