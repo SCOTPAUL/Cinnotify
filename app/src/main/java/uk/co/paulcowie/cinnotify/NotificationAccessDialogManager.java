@@ -14,10 +14,6 @@ public class NotificationAccessDialogManager {
     private Context context;
     private AlertDialog dialog;
 
-    public NotificationAccessDialogManager() {
-
-    }
-
     public NotificationAccessDialogManager(Context context){
         this.context = context;
     }

@@ -5,7 +5,10 @@
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
         <item name="colorAccent">#9575CD</item>
     </style>
-    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar"/>
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#673AB7</item>
+        <item name="colorPrimaryDark">#4527A0</item>
+    </style>
 
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">#9575CD</item>
