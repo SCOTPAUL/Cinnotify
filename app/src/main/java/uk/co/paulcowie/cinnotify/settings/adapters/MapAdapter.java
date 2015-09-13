@@ -1,4 +1,4 @@
-package uk.co.paulcowie.cinnotify.adapters;
+package uk.co.paulcowie.cinnotify.settings.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;

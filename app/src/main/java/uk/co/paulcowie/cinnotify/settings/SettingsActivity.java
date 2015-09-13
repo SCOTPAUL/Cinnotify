@@ -1,4 +1,4 @@
-package uk.co.paulcowie.cinnotify;
+package uk.co.paulcowie.cinnotify.settings;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.util.regex.Pattern;
 
-import uk.co.paulcowie.cinnotify.adapters.AllowedAppsActivity;
+import uk.co.paulcowie.cinnotify.R;
 import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 /**

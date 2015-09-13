@@ -1,4 +1,4 @@
-package uk.co.paulcowie.cinnotify.adapters;
+package uk.co.paulcowie.cinnotify.settings;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -17,6 +17,8 @@ import java.io.IOException;
 
 import uk.co.paulcowie.cinnotify.AllowedNotificationManager;
 import uk.co.paulcowie.cinnotify.R;
+import uk.co.paulcowie.cinnotify.settings.adapters.CheckBoxAdapter;
+import uk.co.paulcowie.cinnotify.settings.adapters.MapAdapter;
 import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 /**

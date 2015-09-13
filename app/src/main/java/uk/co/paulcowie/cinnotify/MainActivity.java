@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import uk.co.paulcowie.cinnotify.settings.SettingsActivity;
 import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 public class MainActivity extends AppCompatActivity {
