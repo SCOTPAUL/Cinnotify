@@ -23,6 +23,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".settings.AllowedAppsActivity"
+            android:theme="@style/ActionBarOverlayAppTheme"
             android:label="@string/allowed_apps_title"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".settings.SettingsActivity"/>

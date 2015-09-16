@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -103,13 +104,19 @@ public class AllowedNotificationManager {
         try {
             return pm.getApplicationIcon(packageName);
         } catch (PackageManager.NameNotFoundException e) {
-            return null;
+            return ContextCompat.getDrawable(context, android.R.drawable.sym_def_app_icon);
         }
     }
 
     public boolean canSendNotification(String packageName){
         Boolean ret = allowedAppInfo.get(packageName);
         return (ret != null) && ret;
+    }
+
+    public void clearAll() throws IOException {
+        allowedAppInfo = new ConcurrentHashMap<>();
+        saveMap();
+        loadMap();
     }
 
     public Map<String, Boolean> getAllowedAppInfo(){

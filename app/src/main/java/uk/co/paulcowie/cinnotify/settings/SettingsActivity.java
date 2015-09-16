@@ -5,13 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.regex.Pattern;
 
+import uk.co.paulcowie.cinnotify.AllowedNotificationManager;
 import uk.co.paulcowie.cinnotify.R;
-import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 /**
  * An {@link AppCompatActivity} which shows and manages user preferences, and handles error messages
@@ -20,7 +26,6 @@ import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeSwitcher.switchTheme(this, "pref_theme", "dark");
         super.onCreate(savedInstanceState);
 
         getFragmentManager().beginTransaction()
@@ -62,7 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             Preference allowedAppsPref = findPreference("allowed_apps_activity");
             final Intent intent = new Intent(getActivity(), AllowedAppsActivity.class);
-            if(allowedAppsPref != null){
+            if (allowedAppsPref != null) {
                 allowedAppsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
@@ -71,6 +76,19 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
             }
+        }
+
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState){
+            View view = super.onCreateView(inflater, container, savedInstanceState);
+
+            if(view != null){
+                ListView lv = (ListView) view.findViewById(android.R.id.list);
+                lv.setPadding(0, 0, 0, 0);
+            }
+
+            return view;
         }
 
         private void displayErrorToast(String errorMsg){

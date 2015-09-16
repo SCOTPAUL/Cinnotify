@@ -5,9 +5,13 @@ import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.AbsListView;
+import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
@@ -19,7 +23,6 @@ import uk.co.paulcowie.cinnotify.AllowedNotificationManager;
 import uk.co.paulcowie.cinnotify.R;
 import uk.co.paulcowie.cinnotify.settings.adapters.CheckBoxAdapter;
 import uk.co.paulcowie.cinnotify.settings.adapters.MapAdapter;
-import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 /**
  * The activity used in the 'Allowed Apps' section of the app settings, which allows users to set
@@ -32,9 +35,7 @@ public class AllowedAppsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeSwitcher.switchTheme(this, "pref_theme", "dark");
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_list_adapter);
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.list_progress);
@@ -47,6 +48,33 @@ public class AllowedAppsActivity extends AppCompatActivity {
 
         final ListView lv = (ListView) findViewById(R.id.list);
         lv.setVisibility(View.GONE);
+        lv.addHeaderView(getLayoutInflater().inflate(R.layout.listview_header, null));
+        lv.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int prevFirstVisibleItem = 0;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if(view.getId() == lv.getId()){
+                    int currentFirstVisibleItem = lv.getFirstVisiblePosition();
+                    ActionBar actionBar = getSupportActionBar();
+
+                    if(actionBar != null){
+                        if(currentFirstVisibleItem > prevFirstVisibleItem){
+                            if(actionBar.isShowing()) actionBar.hide();
+                        }
+                        else if(currentFirstVisibleItem < prevFirstVisibleItem){
+                            if(!actionBar.isShowing()) actionBar.show();
+                        }
+                    }
+
+                    prevFirstVisibleItem = currentFirstVisibleItem;
+                }
+            }
+        });
+
         final Context context = this;
 
         new AsyncTask<Void, Void, Void>() {
@@ -80,6 +108,8 @@ public class AllowedAppsActivity extends AppCompatActivity {
 
 
         }.execute();
+
+
     }
 
     @Override

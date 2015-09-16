@@ -7,13 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import uk.co.paulcowie.cinnotify.settings.SettingsActivity;
-import uk.co.paulcowie.cinnotify.util.ThemeSwitcher;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeSwitcher.switchTheme(this, "pref_theme", "dark");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
