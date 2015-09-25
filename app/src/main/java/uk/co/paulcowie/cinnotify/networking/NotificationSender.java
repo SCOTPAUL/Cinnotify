@@ -83,7 +83,8 @@ public class NotificationSender implements Runnable {
             sock.connect(sockaddr, timeoutMs);
 
             return sock;
-        }catch(Exception e){
+        }
+        catch(Exception e){
             Log.w(TAG, "Failed to connect");
             return null;
         }

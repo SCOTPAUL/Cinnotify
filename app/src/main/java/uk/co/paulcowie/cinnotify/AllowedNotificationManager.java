@@ -1,8 +1,10 @@
 package uk.co.paulcowie.cinnotify;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
@@ -11,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,31 +63,30 @@ public class AllowedNotificationManager {
     }
 
     private void populateMap(){
-        List<ApplicationInfo> appInfo = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+        final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        final List<ResolveInfo> pkgAppsList = pm.queryIntentActivities(mainIntent, PackageManager.GET_META_DATA);
+        final Map<String, Boolean> newMap = new ConcurrentHashMap<>();
 
-        // Remove old apps from map
-        for(String app : allowedAppInfo.keySet()){
-            boolean found = false;
+        for(ResolveInfo resInfo: pkgAppsList){
+            String packageName = resInfo.activityInfo.applicationInfo.packageName;
 
-            for(ApplicationInfo appInList : appInfo){
-                if(app.equals(appInList.packageName)){
-                    found = true;
-                }
+            if(allowedAppInfo.containsKey(packageName)){
+                newMap.put(packageName, allowedAppInfo.get(packageName));
             }
-
-            if(!found){
-                allowedAppInfo.remove(app);
-            }
-        }
-
-        // Add new apps to map
-        for(ApplicationInfo app : appInfo){
-            if(!allowedAppInfo.containsKey(app.packageName)){
-                allowedAppInfo.put(app.packageName, false);
+            else{
+                newMap.put(packageName, false);
             }
         }
+
+        allowedAppInfo = newMap;
     }
 
+    /**
+     * Returns the Application name from the package name
+     * @param packageName Name of an Android application package
+     * @return Application name if it exists, else null
+     */
     public String getUserReadableName(String packageName){
         // https://stackoverflow.com/questions/5841161/get-application-name-from-package-name
 
@@ -100,6 +100,11 @@ public class AllowedNotificationManager {
         return (String) (ai != null ? pm.getApplicationLabel(ai) : null);
     }
 
+    /**
+     * Returns the Application icon from the package name
+     * @param packageName Name of an Android application package
+     * @return Application icon if it exists, else the system default app icon
+     */
     public Drawable getAppIcon(String packageName){
         try {
             return pm.getApplicationIcon(packageName);
@@ -108,15 +113,13 @@ public class AllowedNotificationManager {
         }
     }
 
+    /**
+     * @param packageName Name of an Android application package
+     * @return If the user has allowed Cinnotify to mirror notifications from this app
+     */
     public boolean canSendNotification(String packageName){
         Boolean ret = allowedAppInfo.get(packageName);
         return (ret != null) && ret;
-    }
-
-    public void clearAll() throws IOException {
-        allowedAppInfo = new ConcurrentHashMap<>();
-        saveMap();
-        loadMap();
     }
 
     public Map<String, Boolean> getAllowedAppInfo(){

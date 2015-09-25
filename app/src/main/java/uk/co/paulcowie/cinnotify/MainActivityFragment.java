@@ -54,7 +54,9 @@ public class MainActivityFragment extends Fragment {
             notificationAccessDialogManager.setContext(view.getContext());
             notificationAccessDialogManager.popupIfAccessNeeded();
 
-            boolean testNotificationEnabled = allowedApps.canSendNotification(appContext.getPackageName());
+            boolean testNotificationEnabled = (allowedApps.canSendNotification(appContext.getPackageName())
+                    && NotificationListener.isEnabled(view.getContext()));
+
             notificationButton.setEnabled(testNotificationEnabled);
             TextView warning = (TextView) view.findViewById(R.id.textView1);
 

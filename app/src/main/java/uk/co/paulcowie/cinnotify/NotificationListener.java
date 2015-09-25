@@ -1,5 +1,6 @@
 package uk.co.paulcowie.cinnotify;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
@@ -11,7 +12,6 @@ import uk.co.paulcowie.cinnotify.networking.NotificationSender;
 
 public class NotificationListener extends NotificationListenerService {
     private static final String TAG = NotificationListener.class.getName();
-
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
@@ -36,7 +36,14 @@ public class NotificationListener extends NotificationListenerService {
     }
 
     private boolean isEnabled(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        return isEnabled(getApplicationContext());
+    }
+
+    /**
+     * @return The status of the listener preference
+     */
+    public static boolean isEnabled(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getBoolean("pref_enabled", false);
     }
 
