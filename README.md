@@ -1,5 +1,5 @@
 # Cinnotify
-Mirrors notifications received on an Android device onto a Linux device with a [libnotify](https://developer.gnome.org/libnotify/) compatible notification server installed (e.g. Cinnamon/GNOME).
+Mirrors notifications received on an Android device onto a Linux device with a [libnotify](https://developer.gnome.org/libnotify/) compatible notification server installed (e.g. Cinnamon/GNOME). This app requires the [Cinnotify server](https://github.com/SCOTPAUL/CinnotifyServer).
 
 ![Screenshot](https://github.com/SCOTPAUL/Cinnotify/raw/master/screenshot.png)
 

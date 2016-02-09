@@ -15,6 +15,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 /**
  * Communicates with Cinnotify server
@@ -48,6 +49,8 @@ public class NotificationSender implements Runnable {
 
         NotificationSerializer serializer = new NotificationSerializer(notification);
         byte[] transmission = serializer.getSerializedTransmission();
+
+        Log.v(TAG, "Sending message " + new String(transmission));
 
         try(OutputStream out = socket.getOutputStream()) {
             out.write(transmission);

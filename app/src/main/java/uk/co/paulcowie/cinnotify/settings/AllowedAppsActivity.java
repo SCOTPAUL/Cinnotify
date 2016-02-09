@@ -40,7 +40,7 @@ public class AllowedAppsActivity extends AppCompatActivity {
 
         final ProgressBar progressBar = (ProgressBar) findViewById(R.id.list_progress);
 
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             int progressBarColor = 0x651FFFFF;
             progressBar.getIndeterminateDrawable().setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN);
             progressBar.getProgressDrawable().setColorFilter(progressBarColor, PorterDuff.Mode.SRC_IN);
@@ -49,24 +49,25 @@ public class AllowedAppsActivity extends AppCompatActivity {
         final ListView lv = (ListView) findViewById(R.id.list);
         lv.setVisibility(View.GONE);
         lv.addHeaderView(getLayoutInflater().inflate(R.layout.listview_header, null));
+
         lv.setOnScrollListener(new AbsListView.OnScrollListener() {
             private int prevFirstVisibleItem = 0;
 
             @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {}
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if(view.getId() == lv.getId()){
+                if (view.getId() == lv.getId()) {
                     int currentFirstVisibleItem = lv.getFirstVisiblePosition();
                     ActionBar actionBar = getSupportActionBar();
 
-                    if(actionBar != null){
-                        if(currentFirstVisibleItem > prevFirstVisibleItem){
-                            if(actionBar.isShowing()) actionBar.hide();
-                        }
-                        else if(currentFirstVisibleItem < prevFirstVisibleItem){
-                            if(!actionBar.isShowing()) actionBar.show();
+                    if (actionBar != null) {
+                        if (currentFirstVisibleItem > prevFirstVisibleItem) {
+                            if (actionBar.isShowing()) actionBar.hide();
+                        } else if (currentFirstVisibleItem < prevFirstVisibleItem) {
+                            if (!actionBar.isShowing()) actionBar.show();
                         }
                     }
 
@@ -89,14 +90,14 @@ public class AllowedAppsActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onPostExecute(final Void result){
+            protected void onPostExecute(final Void result) {
                 lv.setAdapter(adapter);
 
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox1);
-                        adapter.setItem(position, !checkBox.isChecked());
+                        adapter.setItem(position - 1, !checkBox.isChecked());
                         checkBox.toggle();
                         Log.v(TAG, "Set item at position " + position + " to " + checkBox.isChecked());
                     }
@@ -113,11 +114,10 @@ public class AllowedAppsActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop(){
-        try{
+    protected void onStop() {
+        try {
             allowedApps.save();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         super.onStop();
