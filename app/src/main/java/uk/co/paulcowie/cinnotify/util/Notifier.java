@@ -32,7 +32,7 @@ public class Notifier {
      */
     public void sendNotification(String title, String content){
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.notification_template_icon_bg)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(content);
 

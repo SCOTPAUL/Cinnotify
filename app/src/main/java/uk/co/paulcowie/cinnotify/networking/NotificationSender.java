@@ -47,7 +47,7 @@ public class NotificationSender implements Runnable {
             return;
         }
 
-        NotificationSerializer serializer = new NotificationSerializer(notification);
+        NotificationSerializer serializer = new NotificationSerializer(context, notification);
         byte[] transmission = serializer.getSerializedTransmission();
 
         Log.v(TAG, "Sending message " + new String(transmission));

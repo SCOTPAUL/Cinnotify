@@ -48,7 +48,6 @@ public class MainActivityFragment extends Fragment {
     public void onResume(){
         super.onResume();
 
-
         View view = getView();
         if(view != null){
             notificationAccessDialogManager.setContext(view.getContext());

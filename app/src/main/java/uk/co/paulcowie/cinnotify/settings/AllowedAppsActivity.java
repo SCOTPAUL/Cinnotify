@@ -110,7 +110,6 @@ public class AllowedAppsActivity extends AppCompatActivity {
 
         }.execute();
 
-
     }
 
     @Override
