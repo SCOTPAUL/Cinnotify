@@ -3,19 +3,14 @@ package uk.co.paulcowie.cinnotify.networking;
 import android.app.Notification;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
 
 /**
  * Communicates with Cinnotify server
@@ -25,14 +20,16 @@ public class NotificationSender implements Runnable {
 
     private Context context;
     private Notification notification;
+    private String senderPackage;
 
     /**
      * @param context The application context
      * @param notification The notification to send to the server
      */
-    public NotificationSender(Context context, Notification notification) {
+    public NotificationSender(String senderPackage, Context context, Notification notification) {
         this.context = context;
         this.notification = notification;
+        this.senderPackage = senderPackage;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class NotificationSender implements Runnable {
             return;
         }
 
-        NotificationSerializer serializer = new NotificationSerializer(context, notification);
+        NotificationSerializer serializer = new NotificationSerializer(senderPackage, context, notification);
         byte[] transmission = serializer.getSerializedTransmission();
 
         Log.v(TAG, "Sending message " + new String(transmission));

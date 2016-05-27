@@ -3,7 +3,6 @@ package uk.co.paulcowie.cinnotify.util;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
-import android.view.View;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

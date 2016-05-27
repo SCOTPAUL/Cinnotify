@@ -13,10 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
 
-import uk.co.paulcowie.cinnotify.AllowedNotificationManager;
 import uk.co.paulcowie.cinnotify.R;
 
 /**
