@@ -23,7 +23,7 @@ public class NotificationListener extends NotificationListenerService {
         sendable = allowedApps.canSendNotification(sbn.getPackageName());
 
         if(sendable && isEnabled()){
-            new Thread(new NotificationSender(getApplicationContext(), sbn.getNotification())).start();
+            new Thread(new NotificationSender(sbn.getPackageName(), getApplicationContext(), sbn.getNotification())).start();
         }
         else{
             Log.v(TAG, "App " + appName + " sent a notification which wasn't sent on");

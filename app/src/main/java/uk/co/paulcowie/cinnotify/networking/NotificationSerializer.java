@@ -2,6 +2,7 @@ package uk.co.paulcowie.cinnotify.networking;
 
 import android.app.Notification;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,10 +35,12 @@ import uk.co.paulcowie.cinnotify.R;
 public class NotificationSerializer {
     private Notification notification;
     private Context context;
+    private String senderPackage;
 
-    public NotificationSerializer(Context context, Notification notification){
+    public NotificationSerializer(String senderPackage, Context context, Notification notification){
         this.notification = notification;
         this.context = context;
+        this.senderPackage = senderPackage;
     }
 
     /**
@@ -87,6 +90,20 @@ public class NotificationSerializer {
         return b64Icon;
     }
 
+    private Bitmap getIcon(int imageRid){
+        Context packageContext;
+
+        try {
+            packageContext = context.createPackageContext(senderPackage, 0);
+        }
+        catch (PackageManager.NameNotFoundException e){
+            return null;
+        }
+
+        return BitmapFactory.decodeResource(packageContext.getResources(), imageRid);
+
+    }
+
     /**
      * Formats the strings in JSON, as described above.
      * @return String in format described in {@link NotificationSerializer}
@@ -98,8 +115,9 @@ public class NotificationSerializer {
         String text = extras.getString(Notification.EXTRA_TEXT);
         String b64Icon = null;
 
+
         int imageRid = extras.getInt(Notification.EXTRA_SMALL_ICON);
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), imageRid);
+        Bitmap icon = getIcon(imageRid);
         if (icon != null) {
             icon = icon.copy(Bitmap.Config.ARGB_8888, false);
             b64Icon = serializeNotificationIcon(icon);
