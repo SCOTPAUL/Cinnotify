@@ -68,12 +68,11 @@ public class NotificationSerializer {
 
     /**
      * Creates a base64 encoded String representation of a notification icon
-     * @param imageRid The resource id of the image
+     * @param icon The icon to be serialized
      * @return a base64 encoded bitmap representation of the image, or null if it doesn't exist
      */
-    private String serializeNotificationIcon(int imageRid){
+    private String serializeNotificationIcon(Bitmap icon){
         String b64Icon = null;
-        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), imageRid);
 
         if(icon != null) {
             int size = icon.getByteCount();
@@ -81,7 +80,6 @@ public class NotificationSerializer {
             icon.copyPixelsToBuffer(bf);
 
             byte[] bytes = bf.array();
-            icon.recycle();
 
             b64Icon = Base64.encodeToString(bytes, Base64.NO_WRAP);
         }
@@ -98,8 +96,14 @@ public class NotificationSerializer {
         Bundle extras = notification.extras;
         String title = extras.getString(Notification.EXTRA_TITLE);
         String text = extras.getString(Notification.EXTRA_TEXT);
+        String b64Icon = null;
+
         int imageRid = extras.getInt(Notification.EXTRA_SMALL_ICON);
-        String b64Icon = serializeNotificationIcon(imageRid);
+        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), imageRid);
+        if (icon != null) {
+            icon = icon.copy(Bitmap.Config.ARGB_8888, false);
+            b64Icon = serializeNotificationIcon(icon);
+        }
 
         JSONObject obj = new JSONObject();
 
@@ -108,7 +112,16 @@ public class NotificationSerializer {
             obj.put("desc", text);
 
             if(b64Icon != null) {
-                obj.put("b64Icon", b64Icon);
+                JSONObject iconData = new JSONObject()
+                        .put("width", icon.getWidth())
+                        .put("height", icon.getHeight())
+                        .put("hasAlpha", icon.hasAlpha())
+                        .put("rowLength", icon.getRowBytes())
+                        .put("b64data", b64Icon);
+
+                obj.put("icon", iconData);
+
+                icon.recycle();
             }
 
         } catch (JSONException e) {
