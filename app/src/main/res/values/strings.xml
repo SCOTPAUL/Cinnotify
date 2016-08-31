@@ -17,5 +17,13 @@
     <string name="pref_enabled_summary">If off, the app will not try to send notifications to the server</string>
     <string name="allowed_apps_title">Allowed Apps</string>
     <string name="allowed_apps_summary">Select the apps that are allowed to send notifications</string>
+
+    <string name="pref_encryption_title">Encryption</string>
+    <string name="pref_encryption_enable">Enable Encryption</string>
+    <string name="pref_encryption_summary">This will send your messages securely to your PC, preventing snoopers from reading them. This is strongly recommended.</string>
+    <string name="pref_encryption_password">Password</string>
+
+
+
     <string name="cinnotify_no_send_explanation">Cinnotify can\'t send a test notification. Make sure that the Listener is enabled in Settings, and that Cinnotify is an allowed app in the \'Allowed Apps\' setting</string>
 </resources>

@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.util.Arrays;
 
 /**
  * Communicates with Cinnotify server
@@ -44,10 +45,21 @@ public class NotificationSender implements Runnable {
             return;
         }
 
-        NotificationSerializer serializer = new NotificationSerializer(senderPackage, context, notification);
+        SecureNotificationSerializer secureSerializer = new SecureNotificationSerializer(senderPackage, context, notification);
+        NotificationSerializer serializer = secureSerializer;
+        if(!secureSerializer.encryptionEnabled()){
+            serializer = new NotificationSerializer(secureSerializer);
+            Log.v(TAG, "Since encryption is not enabled, sending in plaintext.");
+        }
+
         byte[] transmission = serializer.getSerializedTransmission();
 
-        Log.v(TAG, "Sending message " + new String(transmission));
+        if(secureSerializer.encryptionEnabled()){
+            Log.v(TAG, "Sending encrypted message which is " + transmission.length + " bytes long: " + Arrays.toString(transmission));
+        }
+        else {
+            Log.v(TAG, "Sending message " + new String(transmission));
+        }
 
         try(OutputStream out = socket.getOutputStream()) {
             out.write(transmission);
@@ -59,7 +71,8 @@ public class NotificationSender implements Runnable {
         finally {
             try {
                 socket.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

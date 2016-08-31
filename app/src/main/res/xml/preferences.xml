@@ -29,4 +29,17 @@
             android:digits="0123456789"
             android:defaultValue="6525" />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_encryption_title"
+        android:key="pref_encryption_settings">
+        <SwitchPreference
+            android:key="pref_encryption_enabled"
+            android:title="@string/pref_encryption_enable"
+            android:summary="@string/pref_encryption_summary"
+            android:defaultValue="false" />
+        <EditTextPreference
+            android:key="pref_encryption_password"
+            android:title="@string/pref_encryption_password"
+            android:inputType="textPassword"/>
+    </PreferenceCategory>
 </PreferenceScreen>

@@ -26,14 +26,20 @@ import java.nio.charset.StandardCharsets;
  * in JSON
  */
 public class NotificationSerializer {
-    private Notification notification;
-    private Context context;
+    protected Notification notification;
+    protected Context context;
     private String senderPackage;
 
     public NotificationSerializer(String senderPackage, Context context, Notification notification){
         this.notification = notification;
         this.context = context;
         this.senderPackage = senderPackage;
+    }
+
+    public NotificationSerializer(NotificationSerializer other) {
+        this.notification = other.notification;
+        this.context = other.context;
+        this.senderPackage = other.senderPackage;
     }
 
     /**
@@ -46,6 +52,16 @@ public class NotificationSerializer {
         byte[] transmissionBody;
         transmissionBody = getTransmissionFromNotification().getBytes(StandardCharsets.UTF_8);
 
+        return getSerializedTransmission(transmissionBody);
+    }
+
+    /**
+     * Creates a serialized transmission in the required form.
+     *
+     * @param transmissionBody the body of the transmission
+     * @return byte array in the format shown in {@link NotificationSerializer}.
+     */
+    public byte[] getSerializedTransmission(byte[] transmissionBody){
         int transmissionSize = transmissionBody.length;
         byte[] size = ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(transmissionSize).array();
         byte[] transmission;
@@ -102,7 +118,7 @@ public class NotificationSerializer {
      * @return String in format described in {@link NotificationSerializer}
      * @see NotificationSerializer
      */
-    private String getTransmissionFromNotification() {
+    protected String getTransmissionFromNotification() {
         Bundle extras = notification.extras;
         String title = extras.getString(Notification.EXTRA_TITLE);
         String text = extras.getString(Notification.EXTRA_TEXT);
