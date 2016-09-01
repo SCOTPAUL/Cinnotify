@@ -2,14 +2,19 @@ package uk.co.paulcowie.cinnotify.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,12 +37,41 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
+
+        private void updatePasswordSummary(String password, EditTextPreference passwordPreference, Preference enabledSwitch){
+            EditText passwordEditText = passwordPreference.getEditText();
+            String maskedSummary = passwordEditText.getTransformationMethod().getTransformation(password, passwordEditText).toString();
+            passwordPreference.setSummary(maskedSummary);
+            enabledSwitch.setEnabled(!TextUtils.isEmpty(password));
+        }
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
 
-            findPreference("pref_ip").setOnPreferenceChangeListener(
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            String password = preferences.getString("pref_encryption_password", "");
+            final Preference encryptionSwitch = findPreference("pref_encryption_enabled");
+            final EditTextPreference passwordEntry = (EditTextPreference) findPreference("pref_encryption_password");
+
+            updatePasswordSummary(password, passwordEntry, encryptionSwitch);
+
+            passwordEntry.setOnPreferenceChangeListener(
+                    new Preference.OnPreferenceChangeListener() {
+                        @Override
+                        public boolean onPreferenceChange(Preference preference, Object newValue) {
+                            updatePasswordSummary((String) newValue, passwordEntry, encryptionSwitch);
+                            return true;
+                        }
+                    }
+            );
+
+
+            final EditTextPreference ipPref = (EditTextPreference) findPreference("pref_ip");
+            ipPref.setSummary(ipPref.getText());
+
+            ipPref.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -45,18 +79,26 @@ public class SettingsActivity extends AppCompatActivity {
                             if (!valid) {
                                 displayErrorToast(newValue + " is not a valid IP.");
                             }
+                            else {
+                                ipPref.setSummary((String) newValue);
+                            }
                             return valid;
                         }
                     }
             );
 
-            findPreference("pref_port").setOnPreferenceChangeListener(
+            final EditTextPreference portPref = (EditTextPreference) findPreference("pref_port");
+            portPref.setSummary(portPref.getText());
+            portPref.setOnPreferenceChangeListener(
                     new Preference.OnPreferenceChangeListener() {
                         @Override
                         public boolean onPreferenceChange(Preference preference, Object newValue) {
                             boolean valid = Pattern.matches("^(?:[0-9]{1,5})$", (String) newValue);
                             if (!valid) {
                                 displayErrorToast(newValue + " is not a valid port.");
+                            }
+                            else {
+                                portPref.setSummary((String) newValue);
                             }
                             return valid;
                         }
