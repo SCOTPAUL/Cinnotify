@@ -69,7 +69,6 @@ public abstract class MapAdapter<K extends Comparable<K>, V> extends BaseAdapter
     /**
      * Provides a basic view, which must be overridden with a {@code getView()} method which
      * actually displays the contents of the map.
-     *
      * {@inheritDoc}
      */
     @Override

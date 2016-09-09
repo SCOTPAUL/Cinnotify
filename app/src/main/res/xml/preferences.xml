@@ -16,6 +16,10 @@
     <PreferenceCategory
         android:title="@string/pref_networking_settings"
         android:key="pref_networking_settings">
+        <PreferenceScreen
+            android:key="service_discovery_activity"
+            android:title="@string/service_discovery_title"
+            android:summary="@string/service_discovery_summary" />
         <EditTextPreference
             android:key="pref_ip"
             android:title="@string/pref_ip"

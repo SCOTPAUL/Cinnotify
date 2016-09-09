@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.util.regex.Pattern;
 
 import uk.co.paulcowie.cinnotify.R;
+import uk.co.paulcowie.cinnotify.networking.services.ServiceDiscovery;
 
 /**
  * An {@link AppCompatActivity} which shows and manages user preferences, and handles error messages
@@ -34,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+
     }
 
     public static class SettingsFragment extends PreferenceFragment {
@@ -49,8 +51,9 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
+            Context context = getActivity().getApplicationContext();
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
             String password = preferences.getString("pref_encryption_password", "");
             final Preference encryptionSwitch = findPreference("pref_encryption_enabled");
             final EditTextPreference passwordEntry = (EditTextPreference) findPreference("pref_encryption_password");
@@ -105,13 +108,27 @@ public class SettingsActivity extends AppCompatActivity {
                     }
             );
 
+
+
             Preference allowedAppsPref = findPreference("allowed_apps_activity");
-            final Intent intent = new Intent(getActivity(), AllowedAppsActivity.class);
+            final Intent allowedAppsIntent = new Intent(getActivity(), AllowedAppsActivity.class);
             if (allowedAppsPref != null) {
                 allowedAppsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
-                        startActivity(intent);
+                        startActivity(allowedAppsIntent);
+                        return false;
+                    }
+                });
+            }
+
+            Preference serviceDiscoveryPref = findPreference("service_discovery_activity");
+            final Intent serviceDiscoveryIntent = new Intent(getActivity(), ServiceDiscoveryActivity.class);
+            if(serviceDiscoveryPref != null){
+                serviceDiscoveryPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        startActivity(serviceDiscoveryIntent);
                         return false;
                     }
                 });
